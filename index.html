@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d1117" />
-    <title>Fuerza — registro de entrenamiento</title>
+    <title>MC-GYM-TRACK</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
@@ -14,7 +14,7 @@
   <body>
     <main id="auth-view" class="auth-shell">
       <section class="auth-copy">
-        <a class="brand" href="/">FUERZA<span>·</span></a>
+        <a class="brand" href="/">MC-GYM-TRACK<span>·</span></a>
         <div><p class="eyebrow">ENTRENÁ CON INTENCIÓN</p><h1>Tu progreso<br />no se adivina.</h1><p class="intro">Registrá cada entrenamiento, seguí tus marcas y volvé más fuerte.</p></div>
         <p class="tiny">Un registro simple para el trabajo que importa.</p>
       </section>
@@ -34,9 +34,9 @@
 
     <main id="app-view" class="app-shell hidden">
       <header class="topbar">
-        <a class="brand" href="#">FUERZA<span>·</span></a>
+        <a class="brand" href="#">MC-GYM-TRACK<span>·</span></a>
         <nav class="main-nav" aria-label="Secciones"><button class="nav-tab active" data-view="workouts">Hoy</button><button class="nav-tab" data-view="routines">Rutinas</button><button class="nav-tab" data-view="progress">Progreso</button><button class="nav-tab" data-view="exercises">Ejercicios</button></nav>
-        <div class="topbar-actions"><span id="sync-status" class="sync-status">Conectado</span><span id="user-email" class="user-email"></span><button id="logout" class="ghost-button">Salir</button></div>
+        <div class="topbar-actions"><span id="user-email" class="user-email"></span><button id="logout" class="ghost-button">Salir</button></div>
       </header>
       <div id="save-toast" class="save-toast hidden" role="status" aria-live="polite"></div>
 
@@ -59,13 +59,13 @@
       <section id="routines-view" class="view-page hidden"><div class="page-hero"><div><p class="eyebrow">PLANIFICACIÓN</p><h1>Rutinas</h1><p class="page-subtitle">Guardá una sesión preparada y volvé a usarla cuando entrenes.</p></div></div><section id="routines-list" class="workouts-list"></section><div id="routines-empty" class="empty-state"><div class="empty-icon">＋</div><h3>Todavía no tenés rutinas</h3><p>Armá un entrenamiento y usá “Guardar como rutina”.</p><button class="button outline start-workout">Armar entrenamiento</button></div></section>
 
       <section id="exercises-view" class="view-page hidden">
-        <div class="page-hero"><div><p class="eyebrow">CATÁLOGO</p><h1>Ejercicios</h1><p class="page-subtitle">Administrá los ejercicios que después elegís en cada entrenamiento.</p></div><div class="catalog-actions"><button id="load-suggested-exercises" class="button outline">Cargar ejercicios sugeridos</button><button id="reset-template" class="button outline danger-outline">Reiniciar y cargar plantilla</button><button id="new-exercise" class="button primary">+ Nuevo ejercicio</button></div></div>
+        <div class="page-hero"><div><p class="eyebrow">CATÁLOGO</p><h1>Ejercicios</h1><p class="page-subtitle">Administrá los ejercicios que después elegís en cada entrenamiento.</p></div><div class="catalog-actions"><button id="new-exercise" class="button primary small-button">+ Nuevo ejercicio</button></div></div>
         <section class="catalog-section"><div id="catalog-filters" class="catalog-filters" aria-label="Filtrar ejercicios por grupo muscular"></div><div id="catalog-list" class="catalog-groups"></div><div id="catalog-empty" class="empty-state"><h3>No tenés ejercicios</h3><p>Agregá el primero para poder registrar un entrenamiento.</p><button class="button outline open-exercise-modal">Agregar ejercicio</button></div></section>
       </section>
 
       <section id="progress-view" class="view-page hidden">
         <div class="page-hero progress-shell"><div><p class="eyebrow">PROGRESO</p><h1>Tu ritmo,<br />a la vista.</h1><p class="progress-intro">Una lectura simple de las series y fechas que ya registraste. Sin IA, sin claves y sin costo.</p></div></div>
-        <section class="progress-shell"><div id="progress-recommendation" class="progress-recommendation"></div><section id="progress-rms-section" class="progress-rms hidden"><div class="section-heading"><div><p class="eyebrow">MARCAS PERSONALES</p><h2>RM reales</h2></div></div><div id="progress-rms" class="progress-rms-list"></div></section><div class="section-heading"><div><p class="eyebrow">POR GRUPO MUSCULAR</p><h2>Así venís</h2></div></div><div id="progress-groups" class="progress-groups"></div></section>
+        <section class="progress-shell"><div id="progress-recommendation" class="progress-recommendation"></div><div id="progress-filters" class="catalog-filters progress-filters" aria-label="Filtrar progreso por grupo muscular"></div><section id="progress-rms-section" class="progress-rms hidden"><div class="section-heading"><div><p class="eyebrow">MARCAS PERSONALES</p><h2>RM reales</h2></div></div><div id="progress-rms" class="progress-rms-list"></div></section><div class="section-heading"><div><p class="eyebrow">POR GRUPO MUSCULAR</p><h2>Así venís</h2></div></div><div id="progress-groups" class="progress-groups"></div></section>
       </section>
     </main>
 
@@ -111,6 +111,6 @@
     </template>
     <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="app.js?v=training-v14"></script>
+    <script src="app.js?v=training-v15"></script>
   </body>
 </html>

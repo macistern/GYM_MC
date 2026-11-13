@@ -1,4 +1,4 @@
-# Fuerza
+# MC-GYM-TRACK
 
 Registro de gimnasio listo para publicar en Vercel. Incluye alta/inicio de sesión por email, ejercicios personales, rutinas reutilizables, historial, notas, RM real y progreso.
 

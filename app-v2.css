@@ -18,4 +18,8 @@
 
 .workout-card-actions{display:flex;gap:8px;align-items:flex-start}@media(max-width:760px){.workout-card-actions{align-self:flex-start}}
 
+.small-button{width:auto!important;padding:10px 13px;font-size:13px}.progress-filters{margin:0 0 34px}.progress-group{grid-template-columns:1.4fr 1fr auto}@media(max-width:760px){.progress-group{grid-template-columns:1fr auto}.progress-group>div:first-child{grid-column:1/-1}}
+
+@media(max-width:760px){.catalog-actions .small-button{align-self:flex-start;width:auto!important}}
+
 .set-labels,.draft-block-row{grid-template-columns:1fr 1.5fr 1.5fr 38px}.complete-block{display:none!important}@media(max-width:760px){.set-labels,.draft-block-row{grid-template-columns:repeat(3,1fr)}.draft-block-row .remove-draft-block{grid-column:1/-1;justify-self:end}}

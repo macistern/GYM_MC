@@ -10,6 +10,7 @@ let draft = [];
 let draftNotes = "";
 let editingRoutineId = null;
 let catalogFilter = "Todos";
+let progressFilter = "Todos";
 let editingWorkoutId = null;
 let currentWorkoutGroup = null;
 let pendingDraft = null;
@@ -60,6 +61,7 @@ const trashIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16m
 
 function setStatus(message = "Guardado en Supabase", isError = false) {
   const status = $("#sync-status");
+  if (!status) return;
   status.textContent = hasSupabase ? message : "Modo local";
   status.classList.toggle("error", isError);
 }
@@ -146,8 +148,18 @@ function resumeSavedDraft() {
 }
 
 function renderProgress() {
-  renderProgressRms();
+  const filters = $("#progress-filters");
   const groups = [...new Set(exercises.map(exercise => exercise.muscle_group))].sort((a, b) => a.localeCompare(b));
+  if (!groups.includes(progressFilter)) progressFilter = "Todos";
+  filters.innerHTML = "";
+  ["Todos", ...groups].forEach(group => {
+    const button = document.createElement("button");
+    button.className = `catalog-filter${progressFilter === group ? " active" : ""}`;
+    button.textContent = group;
+    button.onclick = () => { progressFilter = group; renderProgress(); };
+    filters.append(button);
+  });
+  renderProgressRms();
   const progress = new Map(groups.map(group => [group, { sets: 0, lastDate: null }]));
   workouts.forEach(workout => (workout.workout_sets || []).forEach(set => {
     const group = set.exercises?.muscle_group;
@@ -179,10 +191,10 @@ function renderProgress() {
     const days = Math.max(0, Math.floor((Date.now() - new Date(groupData.lastDate).getTime()) / 86400000));
     recommendation.innerHTML = `<strong>Hoy podrías entrenar ${escapeHtml(group)}</strong><p>Es el grupo que hace más tiempo no registrás: ${days === 0 ? "hoy" : `hace ${days} ${days === 1 ? "día" : "días"}`}.</p>`;
   }
-  ordered.forEach(([name, data]) => {
+  ordered.filter(([name]) => progressFilter === "Todos" || name === progressFilter).forEach(([name, data]) => {
     const row = document.createElement("article");
     row.className = "progress-group";
-    row.innerHTML = `<div><h3>${escapeHtml(name)}</h3><p>${data.lastDate ? `Última vez: ${formatDate(data.lastDate)}` : "Todavía sin registros"}</p></div><div class="progress-value"><small>SERIES</small>${data.sets}</div><div class="progress-value"><small>ESTADO</small>${name === group ? "Siguiente" : "Al día"}</div><button class="text-button progress-open">Ver ejercicios</button>`;
+    row.innerHTML = `<div><h3>${escapeHtml(name)}</h3><p>${data.lastDate ? `Última vez: ${formatDate(data.lastDate)}` : "Todavía sin registros"}</p></div><div class="progress-value"><small>SERIES REGISTRADAS</small>${data.sets}</div><button class="text-button progress-open">Ver ejercicios</button>`;
     $(".progress-open", row).onclick = () => { catalogFilter = name; showView("exercises"); renderCatalog(); window.scrollTo({ top: 0, behavior: "smooth" }); };
     list.append(row);
   });
@@ -191,7 +203,7 @@ function renderProgress() {
 function renderProgressRms() {
   const section = $("#progress-rms-section");
   const list = $("#progress-rms");
-  const records = exercises.filter(exercise => exercise.real_rm !== null && exercise.real_rm !== undefined).sort((first, second) => Number(second.real_rm) - Number(first.real_rm));
+  const records = exercises.filter(exercise => (progressFilter === "Todos" || exercise.muscle_group === progressFilter) && exercise.real_rm !== null && exercise.real_rm !== undefined).sort((first, second) => Number(second.real_rm) - Number(first.real_rm));
   section.classList.toggle("hidden", !records.length);
   list.innerHTML = "";
   records.forEach(exercise => {
@@ -757,8 +769,6 @@ $("#workout-date").onchange = event => { draftWorkoutDate = event.target.value; 
 $("#workout-notes").oninput = event => { draftNotes = event.target.value; persistDraft(); };
 $("#save-workout").onclick = saveWorkout;
 $("#new-exercise").onclick = () => $("#exercise-modal").showModal();
-$("#load-suggested-exercises").onclick = loadSuggestedExercises;
-$("#reset-template").onclick = resetToStarterTemplate;
 $("#resume-draft-button").onclick = resumeSavedDraft;
 $("#discard-draft").onclick = () => { if (confirm("¿Descartar este borrador? No vas a poder recuperarlo.")) discardSavedDraft(); };
 $("#real-rm-form").onsubmit = saveRealRm;
