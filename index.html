@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d1117" />
+    <title>Fuerza — registro de entrenamiento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="app-v2.css" />
+  </head>
+  <body>
+    <main id="auth-view" class="auth-shell">
+      <section class="auth-copy">
+        <a class="brand" href="/">FUERZA<span>·</span></a>
+        <div><p class="eyebrow">ENTRENÁ CON INTENCIÓN</p><h1>Tu progreso<br />no se adivina.</h1><p class="intro">Registrá cada entrenamiento, seguí tus marcas y volvé más fuerte.</p></div>
+        <p class="tiny">Un registro simple para el trabajo que importa.</p>
+      </section>
+      <section class="auth-panel">
+        <div class="auth-card">
+          <p class="eyebrow">EMPEZÁ HOY</p><h2>Creá tu cuenta</h2><p class="muted">Usá tu email para guardar tu progreso.</p>
+          <form id="auth-form">
+            <label>Email<input id="email" type="email" autocomplete="email" placeholder="vos@email.com" required /></label>
+            <label>Contraseña<input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo 6 caracteres" required /></label>
+            <button class="button primary" type="submit">Crear cuenta <span>→</span></button>
+          </form>
+          <p id="auth-message" class="form-message" aria-live="polite"></p>
+          <p class="switch-copy">¿Ya tenés cuenta? <button id="switch-auth" class="text-button" type="button">Iniciá sesión</button></p>
+        </div>
+      </section>
+    </main>
+
+    <main id="app-view" class="app-shell hidden">
+      <header class="topbar">
+        <a class="brand" href="#">FUERZA<span>·</span></a>
+        <nav class="main-nav" aria-label="Secciones"><button class="nav-tab active" data-view="workouts">Hoy</button><button class="nav-tab" data-view="routines">Rutinas</button><button class="nav-tab" data-view="progress">Progreso</button><button class="nav-tab" data-view="exercises">Ejercicios</button></nav>
+        <div class="topbar-actions"><span id="sync-status" class="sync-status">Conectado</span><span id="user-email" class="user-email"></span><button id="logout" class="ghost-button">Salir</button></div>
+      </header>
+      <div id="save-toast" class="save-toast hidden" role="status" aria-live="polite"></div>
+
+      <section id="workouts-view" class="view-page">
+        <div class="page-hero"><div><p id="today" class="eyebrow"></p><h1>Entrenamientos</h1><p class="page-subtitle">Registrá lo que hiciste. La fecha y hora se guardan solas.</p></div><button id="new-workout" class="button primary">+ Registrar entrenamiento</button></div>
+        <section id="resume-draft" class="resume-draft hidden"><div><h3>Tenés un entrenamiento sin terminar</h3><p id="resume-draft-copy"></p></div><div class="resume-actions"><button id="discard-draft" class="button outline">Descartar</button><button id="resume-draft-button" class="button primary">Continuar <span>→</span></button></div></section>
+        <section id="workout-editor" class="workout-editor hidden">
+          <div class="editor-heading"><div><p id="draft-mode" class="eyebrow">NUEVO ENTRENAMIENTO</p><h2 id="draft-date"></h2><label class="workout-date-input">Fecha del entrenamiento<input id="workout-date" type="date" /></label><button id="change-workout-group" class="text-button" type="button"></button></div><button id="cancel-workout" class="ghost-button">Salir y guardar borrador</button></div>
+          <div id="draft-exercises" class="draft-exercises"></div><label class="workout-notes">Notas opcionales<textarea id="workout-notes" maxlength="500" placeholder="Ej. buena técnica, molestia en hombro..."></textarea></label>
+          <div class="editor-actions"><button id="add-workout-exercise" class="button outline">+ Agregar ejercicio</button><button id="save-routine" class="button outline">Guardar como rutina</button><button id="save-workout" class="button primary">Guardar entrenamiento <span>→</span></button></div>
+          <p id="workout-error" class="form-message"></p>
+        </section>
+        <section class="history-section">
+          <div class="section-heading"><div><p class="eyebrow">HISTORIAL</p><h2>Entrenamientos anteriores</h2></div></div>
+          <div id="workouts-list" class="workouts-list"></div>
+          <div id="workouts-empty" class="empty-state"><div class="empty-icon">＋</div><h3>Todavía no registraste entrenamientos</h3><p>Creá el primero y empezá a seguir tu progreso.</p><button class="button outline start-workout">Registrar entrenamiento</button></div>
+        </section>
+      </section>
+
+      <section id="routines-view" class="view-page hidden"><div class="page-hero"><div><p class="eyebrow">PLANIFICACIÓN</p><h1>Rutinas</h1><p class="page-subtitle">Guardá una sesión preparada y volvé a usarla cuando entrenes.</p></div></div><section id="routines-list" class="workouts-list"></section><div id="routines-empty" class="empty-state"><div class="empty-icon">＋</div><h3>Todavía no tenés rutinas</h3><p>Armá un entrenamiento y usá “Guardar como rutina”.</p><button class="button outline start-workout">Armar entrenamiento</button></div></section>
+
+      <section id="exercises-view" class="view-page hidden">
+        <div class="page-hero"><div><p class="eyebrow">CATÁLOGO</p><h1>Ejercicios</h1><p class="page-subtitle">Administrá los ejercicios que después elegís en cada entrenamiento.</p></div><div class="catalog-actions"><button id="load-suggested-exercises" class="button outline">Cargar ejercicios sugeridos</button><button id="reset-template" class="button outline danger-outline">Reiniciar y cargar plantilla</button><button id="new-exercise" class="button primary">+ Nuevo ejercicio</button></div></div>
+        <section class="catalog-section"><div id="catalog-filters" class="catalog-filters" aria-label="Filtrar ejercicios por grupo muscular"></div><div id="catalog-list" class="catalog-groups"></div><div id="catalog-empty" class="empty-state"><h3>No tenés ejercicios</h3><p>Agregá el primero para poder registrar un entrenamiento.</p><button class="button outline open-exercise-modal">Agregar ejercicio</button></div></section>
+      </section>
+
+      <section id="progress-view" class="view-page hidden">
+        <div class="page-hero progress-shell"><div><p class="eyebrow">PROGRESO</p><h1>Tu ritmo,<br />a la vista.</h1><p class="progress-intro">Una lectura simple de las series y fechas que ya registraste. Sin IA, sin claves y sin costo.</p></div></div>
+        <section class="progress-shell"><div id="progress-recommendation" class="progress-recommendation"></div><section id="progress-rms-section" class="progress-rms hidden"><div class="section-heading"><div><p class="eyebrow">MARCAS PERSONALES</p><h2>RM reales</h2></div></div><div id="progress-rms" class="progress-rms-list"></div></section><div class="section-heading"><div><p class="eyebrow">POR GRUPO MUSCULAR</p><h2>Así venís</h2></div></div><div id="progress-groups" class="progress-groups"></div></section>
+      </section>
+    </main>
+
+    <dialog id="exercise-modal">
+      <form id="exercise-form" class="modal-card">
+        <button class="close" type="button" data-close="exercise-modal" aria-label="Cerrar">×</button>
+        <p class="eyebrow">NUEVO EJERCICIO</p><h2>Agregá un ejercicio</h2>
+        <label>Nombre<input id="exercise-name" required maxlength="70" placeholder="Ej. Press banca" /></label>
+        <label>Grupo muscular<select id="muscle-group"><option>Pecho</option><option>Espalda</option><option>Piernas</option><option>Hombros</option><option>Brazos</option><option>Core</option><option>Otro</option></select></label>
+        <button class="button primary" type="submit">Guardar ejercicio <span>→</span></button><p id="exercise-error" class="form-message"></p>
+      </form>
+    </dialog>
+    <dialog id="choose-exercise-modal">
+      <div class="modal-card">
+        <button class="close" type="button" data-close="choose-exercise-modal" aria-label="Cerrar">×</button>
+        <p class="eyebrow">ENTRENAMIENTO</p><h2>Elegí un ejercicio</h2><div id="exercise-options" class="exercise-options"></div>
+        <button id="create-exercise-from-workout" class="text-button modal-link">¿No aparece? Creá un ejercicio nuevo</button>
+      </div>
+    </dialog>
+    <dialog id="choose-muscle-modal">
+      <div class="modal-card">
+        <button class="close" type="button" data-close="choose-muscle-modal" aria-label="Cerrar">×</button>
+        <p class="eyebrow">ENTRENAMIENTO</p><h2>¿Qué grupo entrenás hoy?</h2><div id="muscle-options" class="exercise-options"></div>
+      </div>
+    </dialog>
+    <dialog id="exercise-progress-modal">
+      <div class="modal-card">
+        <button class="close" type="button" data-close="exercise-progress-modal" aria-label="Cerrar">×</button>
+        <p id="progress-exercise-muscle" class="eyebrow"></p><h2 id="progress-exercise-name"></h2>
+        <section class="rm-card"><p class="eyebrow">RM REAL</p><strong id="real-rm-value">Sin registrar</strong><p id="real-rm-date"></p><button id="edit-rm-button" class="button outline rm-action" type="button">Registrar RM</button><form id="real-rm-form" class="rm-form hidden"><label>Peso (kg)<input id="real-rm-input" type="number" min="0" step="0.5" inputmode="decimal" placeholder="Ej. 100" required /></label><label>Fecha<input id="real-rm-date-input" type="date" required /></label><button class="button primary" type="submit">Guardar RM <span>→</span></button></form></section>
+        <section><p class="eyebrow">HISTORIAL</p><div id="exercise-progress-history" class="exercise-progress-history"></div></section>
+      </div>
+    </dialog>
+    <dialog id="draft-choice-modal">
+      <div class="modal-card compact-modal">
+        <button class="close" type="button" data-close="draft-choice-modal" aria-label="Cerrar">×</button>
+        <p class="eyebrow">ENTRENAMIENTO SIN TERMINAR</p><h2>¿Qué querés hacer?</h2><p class="muted">Ya tenés un entrenamiento guardado como borrador.</p>
+        <div class="modal-actions"><button id="continue-draft-choice" class="button primary">Continuar borrador <span>→</span></button><button id="start-fresh-choice" class="button outline">Empezar uno nuevo</button></div>
+      </div>
+    </dialog>
+    <template id="draft-exercise-template">
+      <article class="draft-card"><div class="draft-card-head"><div><p class="muscle"></p><h3></h3><p class="draft-series-total"></p></div><button class="remove-draft-exercise" aria-label="Quitar ejercicio">×</button></div><div class="set-labels"><span>SERIES</span><span>REPETICIONES</span><span>PESO (KG)</span><span></span></div><div class="draft-block-list"></div><button class="add-draft-block">+ Agregar bloque</button></article>
+    </template>
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js?v=training-v14"></script>
+  </body>
+</html>
