@@ -96,7 +96,7 @@ create or replace function public.replace_workout_sets(
 )
 returns void
 language plpgsql
-security invoker
+security definer
 set search_path = public
 as $$
 begin
@@ -105,6 +105,15 @@ begin
     where id = p_workout_id and user_id = auth.uid()
   ) then
     raise exception 'No tenés permiso para modificar este entrenamiento';
+  end if;
+
+  if exists (
+    select 1
+    from jsonb_to_recordset(p_sets) as incoming(exercise_id uuid, set_number integer, weight numeric, reps integer, completed boolean)
+    left join public.exercises on exercises.id = incoming.exercise_id
+    where exercises.user_id is distinct from auth.uid()
+  ) then
+    raise exception 'Uno o más ejercicios no te pertenecen';
   end if;
 
   if p_created_at is not null then
